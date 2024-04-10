@@ -25,3 +25,8 @@ void UpdateEvents(Input* in, SDL_bool* quit)
 		}
 	}
 }
+
+void UpdateControls()
+{
+
+}

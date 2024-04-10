@@ -8,6 +8,11 @@ typedef struct
     char key[SDL_NUM_SCANCODES];
 } Input;
 
+//typedef struct
+//{
+//    int play;
+//} Controls;
+
 
 // Functions
 void UpdateEvents(Input* in, SDL_bool* quit);

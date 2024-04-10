@@ -30,8 +30,9 @@ int rotateRect(RectLife* rect, double rad);
 int rotateRectDir(RectLife* rect, int index);
 int readDirectionBit(uint8_t* moveAdn, int index);
 int ColiderEngine(RectLife* lifeArray, RectZone* zoneArray, int nPop);
-int initRectArray(RectLife rectArray[], int sizeRect, int nPop);
+int initRectArray(RectLife** rectArray, int sizeRect, int nPop);
 int drawRect(RectLife* rect, SDL_Renderer* renderer);
+void printBits(size_t const size, void const * const ptr);
 
 // End of header file
 #endif

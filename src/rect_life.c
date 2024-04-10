@@ -9,6 +9,22 @@ extern int ADNSIZE;
 extern double SPEED;
 extern double ROTATIONSPEED;
 
+#define bool 	int
+#define true 	1
+#define false 	0
+
+int initRectArray(RectLife** rectArray, int sizeRect, int nPop)
+{
+	*rectArray = malloc(nPop*sizeof(RectLife));
+	for(int i = 0; i < nPop; i++)
+	{
+		createRect(&(*rectArray)[i], sizeRect);
+	}
+
+	return 1;
+}
+
+
 int createRect(RectLife* rect, int size)
 {
 		rect->size = size;
@@ -32,8 +48,8 @@ int createRect(RectLife* rect, int size)
 			rect->moveAdn[i] = (uint8_t)rand()%MAX_RAND;
 		}
 
-		rect->speedAdn = (uint8_t*)malloc(ADNSIZE*8*sizeof(uint8_t));
-		for(int i = 0; i < ADNSIZE*8; i++)
+		rect->speedAdn = (uint8_t*)malloc(ADNSIZE*sizeof(uint8_t));
+		for(int i = 0; i < ADNSIZE; i++)
 		{
 			rect->speedAdn[i] = (uint8_t)rand()%MAX_RAND;
 		}
@@ -71,20 +87,20 @@ int rotateRect(RectLife* rect, double rad)
 
 int readDirectionBit(uint8_t* moveAdn, int index)
 {
-	// printf("############################### Read Bit Index n°%d	###############################\n");
+	// printf("############################### Read Bit Index no %d	###############################\n");
 	int segment = index/(sizeof(uint8_t)*8);
-	// printf("Segment n°%d	: ", segment);
-	// printBits(sizeof(uint8_t), &moveAdn[segment]);
+	//printf("Segment no %d	: ", segment);
+	//printBits(sizeof(uint8_t), &moveAdn[segment]);
 
 	uint8_t mask = 0x01 << index%8;
-	// printf("\nmask		: ");
-	// printBits(sizeof(uint8_t), &mask);
+	//printf("\nmask		: ");
+	//printBits(sizeof(uint8_t), &mask);
 
 	uint8_t dir = 0;
 	dir = (moveAdn[segment] & mask);
-	// printf("\ndir		: ", dir);
-	// printBits(sizeof(uint8_t), &dir);
-	// printf("\n");
+	//printf("\ndir		: ");
+	//printBits(sizeof(uint8_t), &dir);
+	//printf("\n");
 
 	return dir;
 }
@@ -143,32 +159,33 @@ void printBits(size_t const size, void const * const ptr)
 // 	return 1;
 // }
 
-int initRectArray(RectLife rectArray[], int sizeRect, int nPop)
-{
-	for(int i = 0; i < nPop; i++)
-	{
-		createRect(&rectArray[i], sizeRect);
-	}
-
-	return 1;
-}
 
 int drawRect(RectLife* rect, SDL_Renderer* renderer)
 {
 	SDL_SetRenderDrawColor(renderer, rect->color.r, rect->color.g, rect->color.b, rect->color.a);
-
+    SDL_Point points[8];
 	double curentAngle = rect->angle;
 	curentAngle += M_PI_4;
-
-	for(int i = 0; i < 4; i++)
+	
+	for(int i = 0; i < 8; i+=2)
 	{
-		int targetX1 = rect->size/2 * cos(curentAngle) + rect->x;
-		int targetY1 = rect->size/2 * sin(curentAngle) + rect->y;
+		points[i].x = rect->size/2 * cos(curentAngle) + rect->x;
+		points[i].y = rect->size/2 * sin(curentAngle) + rect->y;
 		curentAngle += M_PI_2;
-		int targetX2 = rect->size/2 * cos(curentAngle) + rect->x;
-		int targetY2 = rect->size/2 * sin(curentAngle) + rect->y;
 
-		SDL_RenderDrawLine(renderer, targetX1, targetY1, targetX2, targetY2);
+		points[i+1].x = rect->size/2 * cos(curentAngle) + rect->x;
+		points[i+1].y = rect->size/2 * sin(curentAngle) + rect->y;
 	}
+	
+	SDL_RenderDrawLines(renderer, points, 8);
+
+	return 1;
+}
+
+int drawPoint(RectLife* rect, SDL_Renderer* renderer)
+{
+	SDL_SetRenderDrawColor(renderer, rect->color.r, rect->color.g, rect->color.b, rect->color.a);
+	SDL_RenderDrawPoint(renderer, rect->x, rect->y);
+
 	return 1;
 }
