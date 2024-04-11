@@ -4,6 +4,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
+#define SUCCESS_CODE 0
+
 //############### Args Def ###############
 int RECTSIZE;
 int ADNSIZE;
@@ -111,13 +113,13 @@ int main(int argc, char** argv)
 
 
 	//###############################	SDL init	###############################
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0 )
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != SUCCESS_CODE)
 	{
-		fprintf(stdout,"Échec de l'initialisation de la SDL (%s)\n",SDL_GetError());
+		fprintf(stdout, "Échec de l'initialisation de la SDL (%s)\n", SDL_GetError());
 		return EXIT_FAILURE;
 	}
 	//Init Input array
-	memset(&IN,0,sizeof(IN));
+	memset(&IN, 0, sizeof(IN));
 
 
 	//############### Run init ################
@@ -125,7 +127,7 @@ int main(int argc, char** argv)
 	STEP = 0;
 
 	//###############################	Window init	###############################
-	if (SDL_CreateWindowAndRenderer(WIDTH, HEIGHT, 0, &WINDOW, &RENDERER) != 0)
+	if (SDL_CreateWindowAndRenderer(WIDTH, HEIGHT, 0, &WINDOW, &RENDERER) != SUCCESS_CODE)
 	{	
 		fprintf(stderr,"Erreur de création de la fenêtre: %s\n",SDL_GetError());
 		SDL_Quit();
@@ -149,10 +151,12 @@ int main(int argc, char** argv)
 
 	SDL_Color textColor = {255, 255, 255, 255}; // White text
 
+	// pas ouf
 	Uint32 startTicks = SDL_GetTicks();
 	float avgFPS;
 	char avgFPSText[32];
-
+	//
+	
 	SDL_Rect textRect;
 	textRect.x = 0;
 	textRect.y = 0;

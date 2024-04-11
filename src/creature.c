@@ -68,7 +68,7 @@ int creature_rotate(Creature* rect, double rad)
 
 int creature_directional_rotate(Creature* rect, int index)
 {
-	uint8_t dir = creature_read_dicreatureion_bit_internal(rect->moveAdn, index);
+	uint8_t dir = creature_read_direction_bit_internal(rect->moveAdn, index);
 	if (dir == 0)
 	{
 		rect->angle += ROTATIONSPEED;
