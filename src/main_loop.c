@@ -1,6 +1,7 @@
 #include "main_loop.h"
 
 #include <stdio.h>
+#include <math.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
@@ -25,8 +26,8 @@ int RUNNING;
 int STEP;
 int FRAME;
 
-//########## RectLife array def ##########
-static RectLife* rectArray;
+//########## Creature array def ##########
+static Creature* creatureArray;
 
 
 int main(int argc, char** argv)
@@ -37,6 +38,8 @@ int main(int argc, char** argv)
 		printf(	
 			"[RECTSIZE] [ADNSIZE] [SPEED] [ROTATIONSPEED] [NPOP] [PLAYMODE] [CORENBR]\n"
 			"\n"
+			"[RECTSIZE] = 0 : Point, switch the renderer to draw point (faster)\n"
+			"\n"
 			"[PLAYMODE] = 0 : Step by step, (type space-bar to show next frame)\n"
 			"[PLAYMODE] = 1 : Continuous, (type space-bar to pause/play)\n"
 			"\n"
@@ -45,7 +48,6 @@ int main(int argc, char** argv)
 		return -1;
 	}
 
-	sscanf(argv[1], "%d", &RECTSIZE);
 	sscanf(argv[2], "%d", &ADNSIZE);
 	sscanf(argv[3], "%lf", &SPEED);
 	sscanf(argv[4], "%lf", &ROTATIONSPEED);
@@ -53,7 +55,7 @@ int main(int argc, char** argv)
 	sscanf(argv[6], "%d", &PLAYMODE);
 
 	printf("############################### Args init ###############################\n");
-	printf("Rectangle size      : %d\n", RECTSIZE);
+	printf("Creature size      : %d\n", RECTSIZE);
 	printf("ADN size            : %d\n", ADNSIZE);
 	printf("Speed               : %lf\n", SPEED);
 	printf("Rotation Speed      : %lf\n", ROTATIONSPEED);
@@ -63,8 +65,9 @@ int main(int argc, char** argv)
 	printf("\n");
 
 
-	//###############################	RectLife init	###############################
-	initRectArray(&rectArray, RECTSIZE, NPOP);
+	//###############################	Creature init	###############################
+
+	creature_init_array(&creatureArray, NPOP);
 
 	//###############################	RectZone init	###############################
 	RectZone obstacleArray[] = {
@@ -152,7 +155,9 @@ int main(int argc, char** argv)
 	SDL_Color textColor = {255, 255, 255, 255}; // White text
 
 	// pas ouf
-	Uint32 startTicks = SDL_GetTicks();
+	Uint64 startTicks = SDL_GetPerformanceCounter();
+	Uint64 endTicks = SDL_GetPerformanceCounter();
+	float elsapsed_ms;
 	float avgFPS;
 	char avgFPSText[32];
 	//
@@ -166,47 +171,62 @@ int main(int argc, char** argv)
 	//###############################	SDL	Loop	###############################
 	while (!QUIT && !IN.key[SDL_SCANCODE_ESCAPE])
 	{
+		startTicks = SDL_GetPerformanceCounter();
+
+		//*** Analytic loop ***
 		FRAME++;
 
-		avgFPS = FRAME / ((SDL_GetTicks() - startTicks) / 1000.f);
-		
-		sprintf(avgFPSText, "FPS: %f", avgFPS);
 
-		textSurface = TTF_RenderText_Solid(font, avgFPSText, textColor);
-		text = SDL_CreateTextureFromSurface(RENDERER, textSurface);
+		//*** Event loop ***
+		UpdateEvents(&IN, &QUIT);
 
 
-		SDL_QueryTexture(text, NULL, NULL, &textRect.w, &textRect.h);
-
-		SDL_SetRenderDrawColor(RENDERER, 0, 0, 0, SDL_ALPHA_OPAQUE);
-		SDL_RenderClear(RENDERER);
-
+		//*** Physic loop ***
 		//IIII number of frame = size of ADN IIII
 		if (STEP < ADNSIZE)
 		{
 
-			runFrame(PLAYMODE);
+			run_physic_frame(PLAYMODE);
 
 			if (STEP == (ADNSIZE) + 1)
 				printf("Generation finished\n");
 		}
 
+
+		//*** Render loop ***
+		//** Creature render **
+		SDL_RenderClear(RENDERER);
 		for(int i = 0; i < NPOP; i++)
 		{
-			drawPoint(&rectArray[i], RENDERER);
+			creature_draw(&creatureArray[i], RENDERER);
 		}
 
+		endTicks = SDL_GetPerformanceCounter();
+
+		elsapsed_ms = (endTicks - startTicks) / (float)SDL_GetPerformanceFrequency() * 1000.0f;
+		SDL_Delay(floor(16.666f - elsapsed_ms));
+		sprintf(avgFPSText, "FPS: %f", 1.0f/(elsapsed_ms/1000.0f));
+
 		
-		// Render text
+		//** text render **
+		textSurface = TTF_RenderText_Solid(font, avgFPSText, textColor);
+		text = SDL_CreateTextureFromSurface(RENDERER, textSurface);
+
+		SDL_QueryTexture(text, NULL, NULL, &textRect.w, &textRect.h);
+
+		SDL_SetRenderDrawColor(RENDERER, 0, 0, 0, SDL_ALPHA_OPAQUE);
 		SDL_RenderCopy(RENDERER, text, NULL, &textRect);
 
 		// Update screen
 		SDL_RenderPresent(RENDERER);
+		
 
+		//SDL renderer chore
 		SDL_FreeSurface(textSurface);
 		SDL_DestroyTexture(text);
-	
-		UpdateEvents(&IN, &QUIT);
+
+
+
 	}
 
 	SDL_DestroyWindow(WINDOW);
@@ -215,7 +235,7 @@ int main(int argc, char** argv)
 	return EXIT_SUCCESS;
 }
 
-void runFrame(int playMode)
+void run_physic_frame(int playMode)
 {
 	if(playMode == 0)
 	{
@@ -225,8 +245,8 @@ void runFrame(int playMode)
 			IN.key[SDL_SCANCODE_RIGHT] = 0;
 			for( int i = 0; i < NPOP; i++)
 			{
-				rotateRectDir(&rectArray[i], STEP);
-				moveRect(&rectArray[i], STEP);
+				creature_directional_rotate(&creatureArray[i], STEP);
+				creature_move(&creatureArray[i], STEP);
 			}
 		}
 	}
@@ -244,8 +264,8 @@ void runFrame(int playMode)
 			STEP +=1;
 			for( int i = 0; i < NPOP; i++)
 			{
-				rotateRectDir(&rectArray[i], STEP);
-				moveRect(&rectArray[i], STEP);
+				creature_directional_rotate(&creatureArray[i], STEP);
+				creature_move(&creatureArray[i], STEP);
 			}
 		}
 	}

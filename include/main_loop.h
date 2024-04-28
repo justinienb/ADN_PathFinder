@@ -4,11 +4,12 @@
 // #includes
 #include "controls.h"
 #include "rect_life.h"
+#include "creature.h"
 #include "rect.h"
 #include "init.h"
 
 int main(int argc, char** argv);
-void runFrame(int playMode);
+void run_physic_frame(int playMode);
 int drawCore(void* threadArgs);
 
 typedef struct 

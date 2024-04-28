@@ -4,7 +4,6 @@
 #include <SDL2/SDL.h>
 #include <math.h>
 
-extern int RECTSIZE;
 extern int ADNSIZE;
 extern double SPEED;
 extern double ROTATIONSPEED;
@@ -59,21 +58,21 @@ int creature_move(Creature* creature, int index)
 	return 1;
 }
 
-int creature_rotate(Creature* rect, double rad)
+int creature_rotate(Creature* creature, double rad)
 {
-	rect->angle += rad;
+	creature->angle += rad;
 	return 1;
 }
 
 
-int creature_directional_rotate(Creature* rect, int index)
+int creature_directional_rotate(Creature* creature, int index)
 {
-	uint8_t dir = creature_read_direction_bit_internal(rect->moveAdn, index);
+	uint8_t dir = creature_read_direction_bit_internal(creature->moveAdn, index);
 	if (dir == 0)
 	{
-		rect->angle += ROTATIONSPEED;
+		creature->angle += ROTATIONSPEED;
 	} else{
-		rect->angle -= ROTATIONSPEED;
+		creature->angle -= ROTATIONSPEED;
 	}
 	return 1;
 }
