@@ -9,9 +9,8 @@ bin/pathfinder.exe [RECTSIZE] [ADNSIZE] [SPEED] [ROTATIONSPEED] [NPOP] [PLAYMODE
 
 
 # Build
-Make
-or
-Make clean
+- Make to build the project
+- Make clean to clean the binary
 
 
 # Setting up the environnement
