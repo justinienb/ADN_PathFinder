@@ -68,7 +68,7 @@ The plugin needed are :
 
 ## does the project is even correctly setup ??
 
-to test if the setup has been corectly setup check if you have some word that are underlined in red, if the code is colored, if you do *CTRL+space* you have a menu suggesting some code.
+to test if the setup has been corectly setup check if you DON'T have some word that are underlined in red, if the code is colored, if you do *CTRL+space* you have a menu suggesting some code.
 
 Also, execute the *make* command. does it work ? does a .exe file have been created in the bin folder ?
 
