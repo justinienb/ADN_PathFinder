@@ -66,8 +66,13 @@ The plugin needed are :
 - Makefile tools
 - Whatever other plugins VScode suggest to install
 
+## does the project is even correctly setup ??
 
-Congrats the project is now fully setup, it's the very very very first step BUT dont get discouraged, it's often troublesome and the developement process is likely to be less complex in some way.
+to test if the setup has been corectly setup check if you have some word that are underlined in red, if the code is colored, if you do *CTRL+space* you have a menu suggesting some code.
+
+Also, execute the *make* command. does it work ? does a .exe file have been created in the bin folder ?
+
+if the answer to all those question is YES then .. congrats, the project is now fully setup, it's the very very very first step BUT dont get discouraged, it's often troublesome and the developement process is likely to be less complex in some way.
 
 # Architecture
 
