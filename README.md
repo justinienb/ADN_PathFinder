@@ -18,7 +18,7 @@ Make clean
 
 ## the basics
 
-first install, if you don't already have it, chocolatey. It is a package manager that alloW you to install command line tool (like git) without trouble. 
+first install, if you don't already have it, chocolatey. It is a package manager that allow you to install command line tool (like git) without trouble. 
 you can install it with this command (intalation is described [here](https://chocolatey.org/install)) :
 ```
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
