@@ -18,7 +18,7 @@ Make clean
 
 ## the basics
 
-first install, if you don't have it chocolatey, it is a package manager, it alloW to install command line tool (like git) without trouble. 
+first install, if you don't already have it, chocolatey. It is a package manager that alloW you to install command line tool (like git) without trouble. 
 you can install it with this command (intalation is described [here](https://chocolatey.org/install)) :
 ```
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
@@ -68,7 +68,7 @@ Congrats the project is fully setup, it's the very very very first step BUT dont
 
 *ATTENTION : WORK IN PROGRESS, THE ARCHITECTURE DESCRIBED HERE HAS NOT BEEN IMPLEMENTED*
 
-this application is divided into multiple part the first one, wich happen to be the entry point of the program is... surprise surprise.... the main ! (okay I know you allready know it).
+this application is divided into multiple part the first one, wich happen to be the entry point of the program is... surprise surprise.... the main ! (okay I know you already know it).
 
 the main module (we will assume module = simple C file in this project (to be really really clear we're talking about the main.c/main.h files here )) is used to check the arguments, check that they are valid, output a help message if they are not or if the wrong number of argument have been entered.
 
