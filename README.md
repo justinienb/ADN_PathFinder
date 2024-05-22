@@ -24,13 +24,13 @@ make clean
 
 ## The basics
 
-first install, if you don't already have it, chocolatey. It is a package manager that allow you to install command line tool (like git) without trouble. 
+Firstly install, if you don't already have it, chocolatey. It is a package manager that allow you to install command line tool (like git) without trouble. 
 you can install it with this command (intalation is described [here](https://chocolatey.org/install)) :
 ```
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 ```
 
-then you will need your favorite editor, I strongly recommand visual studio [here](https://code.visualstudio.com/).
+Then you will need your favorite editor, I strongly recommand visual studio [here](https://code.visualstudio.com/).
 
 Then you will need to install git with this command using the *powershell*
 ```
@@ -47,7 +47,7 @@ gcc --version
 
 ## Visual studio plugin
 
-after aquiring the basic tools, you need to clone the projet into a folder with the command
+After aquiring the basic tools, you need to clone the projet into a folder with the command
 ```
 git clone https://github.com/Tictactouc/ADN_PathFinder.git
 ```
@@ -56,9 +56,9 @@ You can clone the project using ssh too, but you'll need to set up a ssh key.
 
 After clonning the project you can open it on visual studio. To do that you can left click on the project folder or directly using the "open a folder" in the file menu of visual studio. The right root folder is the one that directly contain the folders src, bin..etc
 
-Once you have the the project opened in visual studio you will need to install some plugins (remember, visual studio is a text editor, to develop on this software you'll often need to enhance it with multiple plugin to enable syntax coloring, syntax error recognition, code autocopletion and suggestion etc...)
+Once you have the the project opened in visual studio you will need to install some plugins (remember, visual studio is a text editor, to develop on this software you'll often need to enhance it with multiple plugin to enable syntax coloring, syntax error recognition, code autocopletion and suggestion etc...).
 
-fortunately, visual studio will detect the technology used in the folder and suggest in popup (in the bottom-right of the screen) some plugin to install.
+Fortunately, visual studio will detect the technology used in the folder and suggest in popup (in the bottom-right of the screen) some plugin to install.
 The plugin needed are :
 - C/C++
 - C/C++ Extention Pack
@@ -73,11 +73,11 @@ Congrats the project is now fully setup, it's the very very very first step BUT 
 
 *ATTENTION : WORK IN PROGRESS, THE ARCHITECTURE DESCRIBED HERE HAS NOT BEEN IMPLEMENTED*
 
-this application is divided into multiple part the first one, wich happen to be the entry point of the program is... surprise surprise.... the main ! (okay I know you already know it).
+This application is divided into multiple part the first one, wich happen to be the entry point of the program is... surprise surprise.... the main ! (okay I know you already know it).
 
 ## Arguments mnagement
 
-the main module (we will assume module = simple C file in this project (to be really really clear we're talking about the main.c/main.h files here )) is used to check the arguments, check that they are valid, output a help message if they are not or if the wrong number of argument have been entered.
+The main module (we will assume module = simple C file in this project (to be really really clear we're talking about the main.c/main.h files here )) is used to check the arguments, check that they are valid, output a help message if they are not or if the wrong number of argument have been entered.
 
 *WHAT IS DESCRIBED BELOW IS NOT IMPLEMENTED*
 
@@ -85,7 +85,7 @@ Then it will create a context variable using the App stucture (The App stucture 
 
 ## Event mnagement
 
-the inputs are managed by the events module
+The inputs are managed by the events module
 
 ##Application
 
@@ -93,6 +93,12 @@ the inputs are managed by the events module
 
 ### creature
 
+creatur.c/creatur.h
+
 ### obstacle
 
+obstacle.c/obstacle.h
+
 ### goal
+
+goal.c/goal.h
