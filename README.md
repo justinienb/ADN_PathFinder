@@ -60,15 +60,16 @@ The plugin needed are :
 - Makefile tools
 - Whatever other plugins VScode suggest to install
 
-## Setting up the environnement : finished
 
-Congrats the project is fully setup, it's the very very very first step BUT dont get discouraged, it's often troublesome and the developement process is likely to be less complex in some way.
+Congrats the project is now fully setup, it's the very very very first step BUT dont get discouraged, it's often troublesome and the developement process is likely to be less complex in some way.
 
-#Architecture
+# Architecture
 
 *ATTENTION : WORK IN PROGRESS, THE ARCHITECTURE DESCRIBED HERE HAS NOT BEEN IMPLEMENTED*
 
 this application is divided into multiple part the first one, wich happen to be the entry point of the program is... surprise surprise.... the main ! (okay I know you already know it).
+
+## Arguments mnagement
 
 the main module (we will assume module = simple C file in this project (to be really really clear we're talking about the main.c/main.h files here )) is used to check the arguments, check that they are valid, output a help message if they are not or if the wrong number of argument have been entered.
 
@@ -76,7 +77,7 @@ the main module (we will assume module = simple C file in this project (to be re
 
 Then it will create a context variable using the App stucture (The App stucture is just a variable that have multiple attribut, simply said, it is a variable that contain other multiple variable. like a folder that contain multiple file). The App variable contain all the context info needed for the rest of the program : all the argument, aaaand others things that I didn't think of just now but that certainly will be usefull in the future.......
 
-## Input mnagement
+## Event mnagement
 
 the inputs are managed by the events module
 
