@@ -22,7 +22,7 @@ make clean
 
 # Setting up the environnement
 
-## the basics
+## The basics
 
 first install, if you don't already have it, chocolatey. It is a package manager that allow you to install command line tool (like git) without trouble. 
 you can install it with this command (intalation is described [here](https://chocolatey.org/install)) :
