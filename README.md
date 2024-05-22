@@ -54,11 +54,11 @@ Once you have the the project opened in visual studio you will need to install s
 
 fortunately, visual studio will detect the technology used in the folder and suggest in popup (in the bottom-right of the screen) some plugin to install.
 The plugin needed are :
--C/C++
--C/C++ Extention Pack
--C/C++ Themes
--Makefile tools
--Whatever other plugins VScode suggest to install
+- C/C++
+- C/C++ Extention Pack
+- C/C++ Themes
+- Makefile tools
+- Whatever other plugins VScode suggest to install
 
 ## Setting up the environnement : finished
 
