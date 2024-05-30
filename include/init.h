@@ -2,10 +2,10 @@
 #define INIT_H
 
 // # define
-#define WIDTH 1024
-#define HEIGHT 768
+#define WIDTH 800
+#define HEIGHT 600
 #define MAX_RAND 256
-#define INIT_X 0
-#define INIT_Y HEIGHT/2
+#define CREATURE_INIT_X 0
+#define CREATURE_INIT_Y HEIGHT/2
 
 #endif

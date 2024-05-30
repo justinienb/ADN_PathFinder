@@ -1,83 +1,71 @@
 #include "creature.h"
+#include "init.h"
 
-#include <stdio.h>
 #include <SDL2/SDL.h>
 #include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
+
 
 extern int ADNSIZE;
 extern double SPEED;
 extern double ROTATIONSPEED;
 
-int creature_init_array(Creature** creature_array, int npop)
-{
-	*creature_array = malloc(npop*sizeof(Creature));
-	for(int i = 0; i < npop; i++)
-	{
-		creature_create(&(*creature_array)[i]);
-	}
+void creature_init(Creature* creature) {
+    creature->x = CREATURE_INIT_X; // Replace with appropriate initial x position
+    creature->y = CREATURE_INIT_Y; // Replace with appropriate initial y position
+    creature->angle = 0;
+    creature->color.r = rand() % 256;
+    creature->color.g = rand() % 256;
+    creature->color.b = rand() % 256;
+    creature->color.a = SDL_ALPHA_OPAQUE;
+    creature->dead = 0;
+    creature->win = 0;
 
-	return 1;
+    creature->rotate_adn = (uint8_t*)malloc(ADNSIZE * sizeof(uint8_t));
+    for (int i = 0; i < ADNSIZE; i++) {
+        creature->rotate_adn[i] = (uint8_t)rand() % 2;
+    }
+
+    creature->speed_adn = (uint8_t*)malloc(ADNSIZE * sizeof(uint8_t));
+    for (int i = 0; i < ADNSIZE; i++) {
+        creature->speed_adn[i] = (uint8_t)rand() % 256;
+    }
 }
 
-
-int creature_create(Creature* creature)
-{
-		creature->x = INIT_X;
-		creature->y = INIT_Y;
-		if (RANDOM_START_ANGLE_BOOL == 1)
-			creature->angle = rand()%360 * M_PI/180;
-		else
-			creature->angle = 0;
-		creature->color.r = rand()%256;
-		creature->color.g = rand()%256;
-		creature->color.b = rand()%256;
-		creature->color.a = SDL_ALPHA_OPAQUE;
-
-		creature->dead = 0;
-		creature->win = 0;
-
-		creature->moveAdn = (uint8_t*)malloc(ADNSIZE*sizeof(uint8_t));
-		for(int i = 0; i < ADNSIZE; i++)
-		{
-			creature->moveAdn[i] = (uint8_t)rand()%MAX_RAND;
-		}
-
-		creature->speedAdn = (uint8_t*)malloc(ADNSIZE*sizeof(uint8_t));
-		for(int i = 0; i < ADNSIZE; i++)
-		{
-			creature->speedAdn[i] = (uint8_t)rand()%MAX_RAND;
-		}
-		return 1;
+void creature_free(Creature* creature) {
+    free(creature->rotate_adn);
+    free(creature->speed_adn);
 }
 
-
-int creature_move(Creature* creature, int index)
-{
-	creature->x = creature->x + SPEED * creature->speedAdn[index] * cos(creature->angle);
-	creature->y = creature->y + SPEED * creature->speedAdn[index] * sin(creature->angle);
-	return 1;
+void creature_move(Creature* creature, int index) {
+    creature->x += SPEED * creature->speed_adn[index] * cos(creature->angle);
+    creature->y += SPEED * creature->speed_adn[index] * sin(creature->angle);
 }
 
-int creature_rotate(Creature* creature, double rad)
-{
-	creature->angle += rad;
-	return 1;
+void creature_rotate(Creature* creature, double rad) {
+    creature->angle += rad;
 }
 
-
-int creature_directional_rotate(Creature* creature, int index)
-{
-	uint8_t dir = creature_read_direction_bit_internal(creature->moveAdn, index);
-	if (dir == 0)
-	{
-		creature->angle += ROTATIONSPEED;
-	} else{
-		creature->angle -= ROTATIONSPEED;
-	}
-	return 1;
+void creature_directional_rotate(Creature* creature, int index) {
+    uint8_t dir = creature->rotate_adn[index % ADNSIZE];
+    if (dir == 0) {
+        creature->angle += ROTATIONSPEED;
+    } else {
+        creature->angle -= ROTATIONSPEED;
+    }
 }
 
+void creature_draw(Creature* creature, SDL_Renderer* renderer) {
+    SDL_SetRenderDrawColor(renderer, creature->color.r, creature->color.g, creature->color.b, creature->color.a);
+    SDL_RenderDrawPoint(renderer, creature->x, creature->y);
+}
 
+//##########################################################################################################
+//##########################################################################################################
+//##########################################################################################################
+
+// those function are for debugging purpose :
 int creature_read_direction_bit_internal(uint8_t* moveAdn, int index)
 {
 	// printf("############################### Read Bit Index no %d	###############################\n");
@@ -112,12 +100,4 @@ void creature_print_bits_internal(size_t const size, void const * const ptr)
             printf("%u", byte);
         }
     }
-}
-
-int creature_draw(Creature* creature, SDL_Renderer* renderer)
-{
-	SDL_SetRenderDrawColor(renderer, creature->color.r, creature->color.g, creature->color.b, creature->color.a);
-	SDL_RenderDrawPoint(renderer, creature->x, creature->y);
-
-	return 1;
 }

@@ -1,35 +1,25 @@
-#ifndef PIXELLIFE_H
-#define PIXELLIFE_H
+#ifndef CREATURE_H
+#define CREATURE_H
 
-// #includes
-#include <stdio.h>
-#include "rect.h"
-#include "init.h"
+#include <SDL2/SDL.h>
+#include <stdint.h>
 
-// structs
-typedef struct
-{
-    float x;
-    float y;
+typedef struct {
+    int x, y;
+    double angle;
     SDL_Color color;
-    float angle;
+    uint8_t* rotate_adn;
+    uint8_t* speed_adn;
     int dead;
     int win;
-    uint8_t* moveAdn;
-    uint8_t* speedAdn;
-
 } Creature;
 
-// Functions
-int creature_create(Creature* creature);
-int creature_init_array(Creature** creature_array, int npop);
+// Function prototypes for creature management
+void creature_init(Creature* creature);
+void creature_free(Creature* creature);
+void creature_move(Creature* creature, int index);
+void creature_rotate(Creature* creature, double rad);
+void creature_directional_rotate(Creature* creature, int index);
+void creature_draw(Creature* creature, SDL_Renderer* renderer);
 
-int creature_move(Creature* creature, int index);
-int creature_rotate(Creature* creature, double rad);
-int creature_directional_rotate(Creature* creature, int index);
-int creature_read_direction_bit_internal(uint8_t* move_adn, int index);
-int creature_draw(Creature* creature, SDL_Renderer* renderer);
-void creature_print_bits_internal(size_t const size, void const * const ptr);
-
-// End of header file
-#endif
+#endif // CREATURE_H

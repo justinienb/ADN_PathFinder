@@ -1,10 +1,10 @@
-#include "controls.h"
+#include "event.h"
 
 #include <stdio.h>
 #include <SDL2/SDL.h>
 
 
-void UpdateEvents(Input* in, SDL_bool* quit)
+void event_update(Input* in, SDL_bool* quit)
 {
 	SDL_Event event;
 	while(SDL_PollEvent(&event))
@@ -12,10 +12,10 @@ void UpdateEvents(Input* in, SDL_bool* quit)
 		switch (event.type)
 		{
 		case SDL_KEYDOWN:
-			in->key[event.key.keysym.scancode]=1;
+ 			in->key[event.key.keysym.scancode]=1;
 			break;
 		case SDL_KEYUP:
-			in->key[event.key.keysym.scancode]=0;
+  			in->key[event.key.keysym.scancode]=0;
 			break;
 		case SDL_QUIT:
 			*quit = SDL_TRUE;
@@ -24,9 +24,4 @@ void UpdateEvents(Input* in, SDL_bool* quit)
 			break;
 		}
 	}
-}
-
-void UpdateControls()
-{
-
 }
