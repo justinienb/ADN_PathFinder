@@ -24,30 +24,10 @@ int population_init(Creature** creatureArray, int numCreatures) {
 }
 
 // Update the state of the population based on the play mode and input
-void population_update(Creature* creatureArray, int playMode, Input* input) {
-
-    if (playMode == 0) { // Step-by-step mode
-        if (input->key[SDL_SCANCODE_RIGHT] == 1) {
-            step += 1;
-            input->key[SDL_SCANCODE_RIGHT] = 0;
-            for (int i = 0; i < NPOP; i++) {
-                creature_directional_rotate(&creatureArray[i], step);
-                creature_move(&creatureArray[i], step);
-            }
-        }
-    } else { // Continuous mode
-        if (input->key[SDL_SCANCODE_SPACE] == 1) {
-            input->key[SDL_SCANCODE_SPACE] = 0;
-            running = !running;
-        }
-        
-        if (running == 1) {
-            step += 1;
-            for (int i = 0; i < NPOP; i++) {
-                creature_directional_rotate(&creatureArray[i], step);
-                creature_move(&creatureArray[i], step);
-            }
-        }
+void population_update(Creature* creatureArray, int playMode) {
+    for (int i = 0; i < NPOP; i++) {
+        creature_directional_rotate(&creatureArray[i], step);
+        creature_move(&creatureArray[i], step);
     }
 }
 

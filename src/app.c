@@ -22,6 +22,8 @@ int PLAYMODE;
 int running;
 int step;
 
+int do_next_step;
+
 static SDL_bool QUIT = SDL_FALSE;
 static SDL_Window* WINDOW = NULL;
 static SDL_Renderer* RENDERER = NULL;
@@ -95,7 +97,7 @@ int app_init(char** argv) {
 
 // Function to run the main application loop
 void app_run() {
-    Uint64 startTicks, endTicks;
+    Uint64 start_ticks, endTicks;
     float elapsed_ms, avgFPS;
     char avgFPSText[32];
     SDL_Rect textRect = {0, 0, 0, 0};
@@ -103,12 +105,15 @@ void app_run() {
     SDL_Surface* textSurface = NULL;
     SDL_Texture* text = NULL;
 
+    do_next_step = 0;
     running = 0;
     step = 0;
 
-
     while (!QUIT) {
-        startTicks = SDL_GetPerformanceCounter();
+        start_ticks = SDL_GetPerformanceCounter();
+
+        // Clear renderer
+        SDL_RenderClear(RENDERER);
 
         // Update events
         event_update(&IN, &QUIT);
@@ -116,18 +121,43 @@ void app_run() {
         if (&IN.key[SDL_SCANCODE_SPACE] == 1) {
             running = !running;
         }
-        // Update population
-        population_update(creatureArray, PLAYMODE, &IN);
 
-        // Clear renderer
-        SDL_RenderClear(RENDERER);
+        if (PLAYMODE == 0) { // Step-by-step mode
+            if (IN.key[SDL_SCANCODE_RIGHT] == 1) {
+                step += 1;
+                IN.key[SDL_SCANCODE_RIGHT] = 0;
+                for (int i = 0; i < NPOP; i++) {
+                    creature_directional_rotate(&creatureArray[i], step);
+                    creature_move(&creatureArray[i], step);
+                }
+            }
+        } else { // Continuous mode
+            if (IN.key[SDL_SCANCODE_SPACE] == 1) {
+                IN.key[SDL_SCANCODE_SPACE] = 0;
+                running = !running;
+            }
+            
+            if (running == 1) {
+                step += 1;
+                for (int i = 0; i < NPOP; i++) {
+                    creature_directional_rotate(&creatureArray[i], step);
+                    creature_move(&creatureArray[i], step);
+                }
+            }
+        }
+        
+        if (do_next_step){
 
-        // Render population
-        population_draw(creatureArray, RENDERER);
+            // Update population
+            population_update(creatureArray, PLAYMODE, &IN);
+
+            // Render population
+            population_draw(creatureArray, RENDERER);
+        }
 
         // Calculate and render FPS
         endTicks = SDL_GetPerformanceCounter();
-        elapsed_ms = (endTicks - startTicks) / (float)SDL_GetPerformanceFrequency() * 1000.0f;
+        elapsed_ms = (endTicks - start_ticks) / (float)SDL_GetPerformanceFrequency() * 1000.0f;
 
         // Delay to cap at 60 FPS
         SDL_Delay(fmax(0, 16.666f - elapsed_ms));
