@@ -7,9 +7,9 @@
 #include <SDL2/SDL.h>
 
 // Function prototypes for population management
-int population_init(Creature** creatureArray, int numCreatures);
-void population_update(Creature* creatureArray, int playMode, Input* input);
-void population_draw(Creature* creatureArray, SDL_Renderer* renderer);
-void population_free(Creature** creatureArray);
+int population_init(int numCreatures);
+void population_update();
+void population_draw(SDL_Renderer* renderer);
+void population_free();
 
 #endif // POPULATION_H

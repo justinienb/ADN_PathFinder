@@ -11,34 +11,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-
+ 
 // Global variables
 int ADNSIZE;
 double SPEED;
 double ROTATIONSPEED;
-int NPOP;
+int NPOP; 
 int PLAYMODE;
-
-int running;
-int step;
-
-int do_next_step;
 
 static SDL_bool QUIT = SDL_FALSE;
 static SDL_Window* WINDOW = NULL;
 static SDL_Renderer* RENDERER = NULL;
 static TTF_Font* FONT = NULL;
-static Creature* creatureArray = NULL;
 static Input IN = {0};
 
 // Function to initialize SDL and other components
 int app_init(char** argv) {
     // Parse command-line arguments
-    sscanf(argv[2], "%d", &ADNSIZE);
-    sscanf(argv[3], "%lf", &SPEED);
-    sscanf(argv[4], "%lf", &ROTATIONSPEED);
-    sscanf(argv[5], "%d", &NPOP);
-    sscanf(argv[6], "%d", &PLAYMODE);
+    sscanf(argv[1], "%d", &ADNSIZE);
+    sscanf(argv[2], "%lf", &SPEED);
+    sscanf(argv[3], "%lf", &ROTATIONSPEED);
+    sscanf(argv[4], "%d", &NPOP);
+    sscanf(argv[5], "%d", &PLAYMODE);
 
     printf("############################### Args init ###############################\n");
     printf("ADN size            : %d\n", ADNSIZE);
@@ -82,7 +76,7 @@ int app_init(char** argv) {
     }
 
     // Initialize the population of creatures
-    if (!population_init(&creatureArray, NPOP)) {
+    if (!population_init(NPOP)) {
         fprintf(stderr, "Failed to initialize population\n");
         TTF_CloseFont(FONT);
         TTF_Quit();
@@ -105,10 +99,8 @@ void app_run() {
     SDL_Surface* textSurface = NULL;
     SDL_Texture* text = NULL;
 
-    do_next_step = 0;
-    running = 0;
-    step = 0;
-
+    int run_next_step = 0;
+    
     while (!QUIT) {
         start_ticks = SDL_GetPerformanceCounter();
 
@@ -118,41 +110,14 @@ void app_run() {
         // Update events
         event_update(&IN, &QUIT);
 
-        if (&IN.key[SDL_SCANCODE_SPACE] == 1) {
-            running = !running;
-        }
-
-        if (PLAYMODE == 0) { // Step-by-step mode
-            if (IN.key[SDL_SCANCODE_RIGHT] == 1) {
-                step += 1;
-                IN.key[SDL_SCANCODE_RIGHT] = 0;
-                for (int i = 0; i < NPOP; i++) {
-                    creature_directional_rotate(&creatureArray[i], step);
-                    creature_move(&creatureArray[i], step);
-                }
-            }
-        } else { // Continuous mode
-            if (IN.key[SDL_SCANCODE_SPACE] == 1) {
-                IN.key[SDL_SCANCODE_SPACE] = 0;
-                running = !running;
-            }
-            
-            if (running == 1) {
-                step += 1;
-                for (int i = 0; i < NPOP; i++) {
-                    creature_directional_rotate(&creatureArray[i], step);
-                    creature_move(&creatureArray[i], step);
-                }
-            }
-        }
+        run_next_step = app_next_step_control(run_next_step);
         
-        if (do_next_step){
-
+        // Render population
+        population_draw(RENDERER);
+        if (run_next_step){
             // Update population
-            population_update(creatureArray, PLAYMODE, &IN);
+            population_update();
 
-            // Render population
-            population_draw(creatureArray, RENDERER);
         }
 
         // Calculate and render FPS
@@ -186,10 +151,35 @@ void app_draw_fps(){
 
 // Function to clean up SDL and other components
 void app_cleanup() {
-    population_free(&creatureArray);
+    population_free();
     TTF_CloseFont(FONT);
     TTF_Quit();
     SDL_DestroyRenderer(RENDERER);
     SDL_DestroyWindow(WINDOW);
     SDL_Quit();
+}
+
+int app_next_step_control(int run_next_step)
+{
+    if (PLAYMODE == 0)
+    { // Step-by-step mode
+        if (IN.key[SDL_SCANCODE_RIGHT] == 1)
+        {
+            IN.key[SDL_SCANCODE_RIGHT] = 0;
+            run_next_step = 1;
+        }
+        else
+        {
+            run_next_step = 0;
+        }
+    }
+    else
+    { // Continuous mode
+        if (IN.key[SDL_SCANCODE_SPACE] == 1)
+        {
+            IN.key[SDL_SCANCODE_SPACE] = 0;
+            run_next_step = !run_next_step;
+        }
+    }
+    return run_next_step;
 }

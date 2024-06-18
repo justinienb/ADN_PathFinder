@@ -6,43 +6,46 @@
 
 // Define NPOP to access the number of creatures globally
 extern int NPOP;
-extern int running;
-extern int step;
 
+// step
+int step;
+
+//creature array
+Creature* creature_array;
 
 // Initialize the population of creatures
-int population_init(Creature** creatureArray, int numCreatures) {
-    *creatureArray = malloc(numCreatures * sizeof(Creature));
-    if (*creatureArray == NULL) {
+int population_init(int numCreatures) {
+    creature_array = malloc(numCreatures * sizeof(Creature));
+    if (creature_array == NULL) {
         return 0; // Allocation failed
     }
     
     for (int i = 0; i < numCreatures; i++) {
-        creature_init(&(*creatureArray)[i]);
+        creature_init(&creature_array[i]);
     }
     return 1;
 }
 
 // Update the state of the population based on the play mode and input
-void population_update(Creature* creatureArray, int playMode) {
+void population_update() {
     for (int i = 0; i < NPOP; i++) {
-        creature_directional_rotate(&creatureArray[i], step);
-        creature_move(&creatureArray[i], step);
+        creature_directional_rotate(&creature_array[i], step);
+        creature_move(&creature_array[i], step);
     }
 }
 
 // Draw the population of creatures
-void population_draw(Creature* creatureArray, SDL_Renderer* renderer) {
+void population_draw(SDL_Renderer* renderer) {
     for (int i = 0; i < NPOP; i++) {
-        creature_draw(&creatureArray[i], renderer);
+        creature_draw(&creature_array[i], renderer);
     }
 }
 
 // Free the memory allocated for the population
-void population_free(Creature** creatureArray) {
+void population_free() {
     for (int i = 0; i < NPOP; i++) {
-        creature_free(&(*creatureArray)[i]);
+        creature_free(&creature_array[i]);
     }
-    free(*creatureArray);
-    *creatureArray = NULL;
+    free(creature_array);
+    creature_array = NULL;
 }
