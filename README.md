@@ -76,34 +76,37 @@ if the answer to all those question is YES then .. congrats, the project is now 
 
 # Architecture
 
-*ATTENTION : WORK IN PROGRESS, THE ARCHITECTURE DESCRIBED HERE HAS NOT BEEN IMPLEMENTED*
-
 This application is divided into multiple part the first one, wich happen to be the entry point of the program is... surprise surprise.... the main ! (okay I know you already know it).
 
-## Arguments mnagement
+Each component works together to create a robust simulation environment where entities interact within a dynamically updated visual context. This architecture aims to make the system modular and extensible, allowing for easy expansion and modification.
 
+
+## Arguments mnagement (main.c)
 The main module (we will assume module = simple C file in this project (to be really really clear we're talking about the main.c/main.h files here )) is used to check the arguments, check that they are valid, output a help message if they are not or if the wrong number of argument have been entered.
 
-*WHAT IS DESCRIBED BELOW IS NOT IMPLEMENTED*
+## Application core functionality (app.c)
 
-Then it will create a context variable using the App stucture (The App stucture is just a variable that have multiple attribut, simply said, it is a variable that contain other multiple variable. like a folder that contain multiple file). The App variable contain all the context info needed for the rest of the program : all the argument, aaaand others things that I didn't think of just now but that certainly will be usefull in the future.......
+The core functionality is handled in app.c, which initializes the SDL framework, sets up the main application window and rendering context, and controls the main simulation loop including drawing and updates based on the simulation state.
 
-## Event mnagement
+## Event mnagement (event.c)
 
-The inputs are managed by the events module
+The inputs are managed by the events module in event.c, which captures and processes user inputs, allowing for interaction with the simulation in real-time.
 
-##Application
+## Population management (population.c)
+population.c/populatin.h - Manages a collection of creatures, handling their lifecycle from initialization to updates during the simulation and final cleanup.
 
-##Entity
+## Entities (En-tities lol)
 
-### creature
+In the heart of our simulation, the entities represent the dynamic components interacting within the virtual environment. Each type of entity, from creatures to obstacles and goals, plays a crucial role in the pathfinding challenges and behaviors demonstrated in the application. Here's how each entity is managed:
 
-creatur.c/creatur.h
+### Creature (creature.c)
 
-### obstacle
+creatur.c/creature.h - Manages individual creature entities, including their initialization, behavior (movement and rotation based on their DNA), and rendering.
 
-obstacle.c/obstacle.h
+### obstacle (obstacle.c)
 
-### goal
+obstacle.c/obstacle.h - Defines obstacles in the simulation environment that creatures must navigate around. (Currently not implemented but planned.)
 
-goal.c/goal.h
+### Goal (goal.c)
+
+goal.c/goal.h - Manages goal points that creatures strive to reach as part of the pathfinding challenges. (Currently not implemented but planned.)
