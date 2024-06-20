@@ -19,6 +19,9 @@ double ROTATIONSPEED;
 int NPOP; 
 int PLAYMODE;
 
+int SIMULATION_STEP;
+
+
 static SDL_bool QUIT = SDL_FALSE;
 static SDL_Window* WINDOW = NULL;
 static SDL_Renderer* RENDERER = NULL;
@@ -76,7 +79,7 @@ int app_init(char** argv) {
     }
 
     // Initialize the population of creatures
-    if (!population_init(NPOP)) {
+    if (!population_init()) {
         fprintf(stderr, "Failed to initialize population\n");
         TTF_CloseFont(FONT);
         TTF_Quit();
@@ -100,25 +103,28 @@ void app_run() {
     SDL_Texture* text = NULL;
 
     int run_next_step = 0;
+    SIMULATION_STEP = 0;
     
     while (!QUIT) {
         start_ticks = SDL_GetPerformanceCounter();
-
-        // Clear renderer
-        SDL_RenderClear(RENDERER);
 
         // Update events
         event_update(&IN, &QUIT);
 
         run_next_step = app_next_step_control(run_next_step);
-        
-        // Render population
-        population_draw(RENDERER);
-        if (run_next_step){
-            // Update population
-            population_update();
 
+        if (run_next_step && SIMULATION_STEP <= ADNSIZE){
+            SIMULATION_STEP++;
+            // Update population
+            population_update(SIMULATION_STEP);
         }
+
+        // Clear renderer buffer with black pixel
+        SDL_SetRenderDrawColor(RENDERER, 0, 0, 0, SDL_ALPHA_OPAQUE); //select black opaque
+        SDL_RenderClear(RENDERER); // turn all pixel in renderer buffer to black (background)
+
+        // Render population
+        population_draw(RENDERER); // draw the little creature on top of the background
 
         // Calculate and render FPS
         endTicks = SDL_GetPerformanceCounter();
@@ -134,15 +140,14 @@ void app_run() {
         text = SDL_CreateTextureFromSurface(RENDERER, textSurface);
         SDL_QueryTexture(text, NULL, NULL, &textRect.w, &textRect.h);
         SDL_RenderCopy(RENDERER, text, NULL, &textRect);
-
-        // Present renderer
-        SDL_SetRenderDrawColor(RENDERER, 0, 0, 0, SDL_ALPHA_OPAQUE);
+        
+        //render buffer to screen
         SDL_RenderPresent(RENDERER);
-
-        // Clean up text rendering
+    }
+        
+        //if QUIT, then clean up text rendering
         SDL_FreeSurface(textSurface);
         SDL_DestroyTexture(text);
-    }
 }
 
 void app_draw_fps(){
