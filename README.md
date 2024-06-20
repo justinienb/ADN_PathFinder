@@ -80,15 +80,16 @@ This application is divided into multiple part the first one, wich happen to be 
 
 Each component works together to create a robust simulation environment where entities interact within a dynamically updated visual context. This architecture aims to make the system modular and extensible, allowing for easy expansion and modification.
 
+![Architecture diagram](Architecture_diagram.svg)
 
-## Arguments mnagement (main.c)
+## Arguments management (main.c)
 The main module (we will assume module = simple C file in this project (to be really really clear we're talking about the main.c/main.h files here )) is used to check the arguments, check that they are valid, output a help message if they are not or if the wrong number of argument have been entered.
 
 ## Application core functionality (app.c)
 
 The core functionality is handled in app.c, which initializes the SDL framework, sets up the main application window and rendering context, and controls the main simulation loop including drawing and updates based on the simulation state.
 
-## Event mnagement (event.c)
+## Event management (event.c)
 
 The inputs are managed by the events module in event.c, which captures and processes user inputs, allowing for interaction with the simulation in real-time.
 
