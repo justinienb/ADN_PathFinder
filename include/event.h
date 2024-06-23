@@ -1,5 +1,5 @@
-#ifndef CONTROL_H
-#define CONTROL_H
+#ifndef EVENT_H
+#define EVENT_H
 
 #include <SDL2/SDL.h>
 
@@ -11,4 +11,4 @@ typedef struct {
 // Function prototypes for handling events
 void event_update(Input* in, SDL_bool* quit);
 
-#endif // CONTROL_H
+#endif // EVENT_H

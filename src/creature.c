@@ -10,6 +10,7 @@
 extern int ADNSIZE;
 extern double SPEED;
 extern double ROTATIONSPEED;
+extern RENDERER;
 
 void creature_init(Creature* creature) {
     creature->x = CREATURE_INIT_X; // Replace with appropriate initial x position
@@ -53,9 +54,9 @@ void creature_directional_rotate(Creature* creature, int step) {
     }
 }
 
-void creature_draw(Creature* creature, SDL_Renderer* renderer) {
-    SDL_SetRenderDrawColor(renderer, creature->color.r, creature->color.g, creature->color.b, creature->color.a);
-    SDL_RenderDrawPoint(renderer, round(creature->x), round(creature->y));
+void creature_draw(Creature* creature) {
+    SDL_SetRenderDrawColor(RENDERER, creature->color.r, creature->color.g, creature->color.b, creature->color.a);
+    SDL_RenderDrawPoint(RENDERER, round(creature->x), round(creature->y));
 }
 
 //##########################################################################################################
