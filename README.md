@@ -1,4 +1,4 @@
-![Architecture_diagram](https://github.com/Tictactouc/ADN_PathFinder/assets/63233669/22d70a37-0fb9-458c-9894-1bedcb0c8483)# Description
+# Description
 Ahah, pixel go brrrrr
 
 
@@ -25,7 +25,7 @@ make clean
 ## The basics
 
 This project is developped in C, so you'll need a compiler. the most used compiller that is compatible with window is MinGw you can downlad it here :
-[https://github.com/niXman/mingw-builds-binaries/releases/](https://github.com/niXman/mingw-builds-binaries/releases/)
+![https://github.com/niXman/mingw-builds-binaries/releases/](https://github.com/niXman/mingw-builds-binaries/releases/)
 
 After the install, check that it is corectly installed using the command
 ```
