@@ -24,21 +24,8 @@ make clean
 
 ## The basics
 
-Firstly install, if you don't already have it, chocolatey. It is a package manager that allow you to install command line tool (like git) without trouble. 
-you can install it with this command (intalation is described [here](https://chocolatey.org/install)) :
-```
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-```
-
-Then you will need your favorite editor, I strongly recommand visual studio [here](https://code.visualstudio.com/).
-
-Then you will need to install git with this command using the *powershell*
-```
-choco install git
-```
-
 This project is developped in C, so you'll need a compiler. the most used compiller that is compatible with window is MinGw you can downlad it here :
-[https://sourceforge.net/projects/mingw/](https://sourceforge.net/projects/mingw/)
+[https://github.com/niXman/mingw-builds-binaries/releases/](https://github.com/niXman/mingw-builds-binaries/releases/)
 
 After the install, check that it is corectly installed using the command
 ```
@@ -47,14 +34,7 @@ gcc --version
 
 ## Visual studio plugin
 
-After aquiring the basic tools, you need to clone the projet into a folder with the command
-```
-git clone https://github.com/Tictactouc/ADN_PathFinder.git
-```
-(if you'r new to git, the url in this command is found by clicking the green button on the top of the project)
-You can clone the project using ssh too, but you'll need to set up a ssh key.
-
-After clonning the project you can open it on visual studio. To do that you can right click on the project folder or directly using the "open a folder" in the file menu of visual studio. The right root folder is the one that directly contain the folders src, bin..etc
+After aquiring the basic tools, you need to clone the projet into a folder. Then you can open it on visual studio. To do that you can right click on the project folder or directly using the "open a folder" in the file menu of visual studio. The right root folder is the one that directly contain the folders src, bin..etc
 
 Once you have the the project opened in visual studio you will need to install some plugins (remember, visual studio is a text editor, to develop on this software you'll often need to enhance it with multiple plugin to enable syntax coloring, syntax error recognition, code autocopletion and suggestion etc...).
 
