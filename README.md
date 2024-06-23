@@ -62,6 +62,8 @@ Each component works together to create a robust simulation environment where en
 
 [Architecture diagram](https://raw.githubusercontent.com/gist/Tictactouc/7cd81b9bdcd51bb2031b1a58993f9a39/raw/a7d18f77ce2d1a6e9b5fc3aad0fe53054bfedc61/Architecture_diagram.svg)
 
+<script src="https://gist.github.com/Tictactouc/7cd81b9bdcd51bb2031b1a58993f9a39.js"></script>
+
 ## Arguments management (main.c)
 The main module (we will assume module = simple C file in this project (to be really really clear we're talking about the main.c/main.h files here )) is used to check the arguments, check that they are valid, output a help message if they are not or if the wrong number of argument have been entered.
 
