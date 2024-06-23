@@ -1,3 +1,5 @@
 /.vscode
-/OldSrc
-/vscodeBackupFile
+*.svg
+*.png
+*.jpeg
+*.exe
