@@ -10,7 +10,8 @@
 extern int ADNSIZE;
 extern double SPEED;
 extern double ROTATIONSPEED;
-extern RENDERER;
+extern SDL_Renderer* RENDERER;
+
 
 void creature_init(Creature* creature) {
     creature->x = CREATURE_INIT_X; // Replace with appropriate initial x position
@@ -45,8 +46,7 @@ void creature_rotate(Creature* creature, double rad) {
 }
 
 void creature_directional_rotate(Creature* creature, int step) {
-    //uint8_t dir = creature_read_direction_bit_internal(creature->rotate_adn, step);
-    uint8_t dir = (uint8_t)rand() % 2;
+    uint8_t dir = creature_read_direction_bit_internal(creature->rotate_adn, step);
     if (dir == 0) {
         creature->angle += ROTATIONSPEED;
     } else {

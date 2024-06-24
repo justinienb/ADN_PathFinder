@@ -19,7 +19,7 @@ int main(int argc, char** argv) {
     }
 
     // Initialize application with command-line arguments
-    if (!app_init(argv)) {
+    if (app_init(argv) == EXIT_FAILURE) {
         fprintf(stderr, "Failed to initialize the application\n");
         return EXIT_FAILURE;
     }

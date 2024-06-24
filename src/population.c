@@ -15,13 +15,13 @@ Creature* creature_array;
 int population_init() {
     creature_array = malloc(NPOP * sizeof(Creature));
     if (creature_array == NULL) {
-        return 0; // Allocation failed
+        return EXIT_FAILURE; // Allocation failed
     }
     
     for (int i = 0; i < NPOP; i++) {
         creature_init(&creature_array[i]);
     }
-    return 1;
+    return EXIT_SUCCESS;
 }
 
 // Update the state of the population based on the play mode and input
@@ -33,9 +33,9 @@ void population_update(int simulation_step) {
 }
 
 // Draw the population of creatures
-void population_draw(SDL_Renderer* renderer) {
+void population_draw() {
     for (int i = 0; i < NPOP; i++) {
-        creature_draw(&creature_array[i], renderer);
+        creature_draw(&creature_array[i]);
     }
 }
 

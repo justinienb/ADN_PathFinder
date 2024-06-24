@@ -4,6 +4,7 @@
 #include "creature.h"
 #include "event.h"
 #include "population.h"
+#include "level.h"
 
 
 #include <SDL2/SDL.h>
@@ -24,7 +25,7 @@ int SIMULATION_STEP;
 
 static SDL_bool QUIT = SDL_FALSE;
 static SDL_Window* WINDOW = NULL;
-static SDL_Renderer* RENDERER = NULL;
+SDL_Renderer* RENDERER = NULL;
 static TTF_Font* FONT = NULL;
 static Input IN = {0};
 
@@ -46,50 +47,60 @@ int app_init(char** argv) {
     printf("\n");
 
     // Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0) {
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) == EXIT_FAILURE) {
         fprintf(stderr, "SDL_Init failed: %s\n", SDL_GetError());
-        return 0;
+        return EXIT_FAILURE;
     }
 
     // Create SDL window and renderer
-    if (SDL_CreateWindowAndRenderer(WIDTH, HEIGHT, 0, &WINDOW, &RENDERER) != 0) {
+    if (SDL_CreateWindowAndRenderer(WIDTH, HEIGHT, 0, &WINDOW, &RENDERER) == EXIT_FAILURE) {
         fprintf(stderr, "SDL_CreateWindowAndRenderer failed: %s\n", SDL_GetError());
         SDL_Quit();
-        return 0;
+        return EXIT_FAILURE;
     }
 
     // Initialize SDL_ttf
-    if (TTF_Init() != 0) {
+    if (TTF_Init() == EXIT_FAILURE) {
         fprintf(stderr, "TTF_Init failed: %s\n", TTF_GetError());
         SDL_DestroyRenderer(RENDERER);
         SDL_DestroyWindow(WINDOW);
         SDL_Quit();
-        return 0;
+        return EXIT_FAILURE;
     }
 
     // Load the font
     FONT = TTF_OpenFont("C:/Windows/Fonts/consola.ttf", 24);
-    if (!FONT) {
+    if (FONT == NULL) {
         SDL_Log("Failed to load font: %s", TTF_GetError());
         TTF_Quit();
         SDL_DestroyRenderer(RENDERER);
         SDL_DestroyWindow(WINDOW);
         SDL_Quit();
-        return 0;
+        return EXIT_FAILURE;
     }
 
     // Initialize the population of creatures
-    if (!population_init()) {
+    if (population_init() == EXIT_FAILURE) {
         fprintf(stderr, "Failed to initialize population\n");
         TTF_CloseFont(FONT);
         TTF_Quit();
         SDL_DestroyRenderer(RENDERER);
         SDL_DestroyWindow(WINDOW);
         SDL_Quit();
-        return 0;
+        return EXIT_FAILURE;
     }
 
-    return 1;
+    if(level_init() == EXIT_FAILURE){
+        fprintf(stderr, "Failed to initialize level\n");
+        TTF_CloseFont(FONT);
+        TTF_Quit();
+        SDL_DestroyRenderer(RENDERER);
+        SDL_DestroyWindow(WINDOW);
+        SDL_Quit();
+        return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
 }
 
 // Function to run the main application loop
@@ -118,10 +129,13 @@ void app_run() {
             // Update population
             population_update(SIMULATION_STEP);
         }
-
+        
         // Clear renderer buffer with black pixel
         SDL_SetRenderDrawColor(RENDERER, 0, 0, 0, SDL_ALPHA_OPAQUE); //select black opaque
         SDL_RenderClear(RENDERER); // turn all pixel in renderer buffer to black (background)
+
+        // Render level
+        level_draw(RENDERER);
 
         // Render population
         population_draw(RENDERER); // draw the little creature on top of the background

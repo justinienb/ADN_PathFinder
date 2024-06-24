@@ -1,5 +1,3 @@
 /.vscode
-*.svg
-*.png
-*.jpeg
+*.git 
 *.exe
