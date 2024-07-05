@@ -1,7 +1,9 @@
 
 #include "level.h"
 #include "init.h"
+#include <stdlib.h>
 #include <SDL2/SDL.h>
+
 
 extern SDL_Renderer* RENDERER;
 
