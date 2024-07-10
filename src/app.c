@@ -19,7 +19,7 @@
 int ADNSIZE;
 double SPEED;
 double ROTATIONSPEED;
-int NPOP; 
+int NPOP;
 int PLAYMODE;
 
 
@@ -156,9 +156,7 @@ void app_run() {
 
         app_handle_state(&app_context.input);
 
-
         app_event_control();
-
 
         //draw statistics
         app_statistics_draw(last_frame_start_ticks, last_frame_end_ticks);
@@ -171,7 +169,7 @@ void app_run() {
         //####################### Statistics #######################
         last_frame_end_ticks = SDL_GetPerformanceCounter();
     }
-        
+    
     app_cleanup(text_surface, text);
 }
 
@@ -187,28 +185,34 @@ void app_draw_background(){
 }
 
 
-void app_handle_state(App_context context) {
+void app_draw_state(App_context context) {
     switch (context.current_state) {
         case MAIN_MENU:
-            menu_handle_event(&context.input);
-            menu_update();
             menu_draw();
             break;
         case SIMULATION:
-            simulation_handle_event(&context.input);
-            simulation_update();
             simulation_draw();
             break;
         case LEVEL_DESIGNER:
-            level_designer_handle_event(&context.input);
-            level_designer_update();
             level_designer_draw();
             break;
     }
 }
 
 
-
+void app_update_state(App_context context) {
+    switch (context.current_state) {
+        case MAIN_MENU:
+            menu_update();
+            break;
+        case SIMULATION:
+            simulation_update();
+            break;
+        case LEVEL_DESIGNER:
+            level_designer_update();
+            break;
+    }
+}
 
 
 
@@ -221,20 +225,3 @@ void app_handle_state(App_context context) {
 
 
 
-// void app_statistics_draw(int last_frame_start_ticks, int last_frame_end_ticks)
-// {
-//     //####################### statistics #######################
-//     // Calculate and render FPS
-//     int elapsed_ms = (last_frame_end_ticks - last_frame_start_ticks) / (float)SDL_GetPerformanceFrequency() * 1000.0f;
-
-//     // Delay to cap at 60 FPS
-//     SDL_Delay(fmax(0, 16.666f - elapsed_ms));
-
-//     int avgFPS = 1.0f / ((elapsed_ms + fmax(0, 16.666666f - elapsed_ms)) / 1000.0f);
-//     sprintf(avgFPSText, "FPS: %f", avgFPS);
-
-//     text_surface = TTF_RenderText_Solid(FONT, avgFPSText, textColor);
-//     text = SDL_CreateTextureFromSurface(RENDERER, text_surface);
-//     SDL_QueryTexture(text, NULL, NULL, &textRect.w, &textRect.h);
-//     SDL_RenderCopy(RENDERER, text, NULL, &textRect);
-// }
