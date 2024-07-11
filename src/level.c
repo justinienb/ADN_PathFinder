@@ -9,7 +9,7 @@ extern SDL_Renderer* RENDERER;
 
 //Obstacle obstacle_array[];
 SDL_Rect* obstacle_array;
-int obstacle_array_size = 0;
+int obstacle_array_size;
 
 Start start;
 End end;
@@ -21,6 +21,8 @@ SDL_Color end_color = {.r = 0, .g = 255, .b = 0, .a = SDL_ALPHA_OPAQUE };
 SDL_Color start_color = {.r = 0, .g = 0, .b = 255, .a = SDL_ALPHA_OPAQUE };
 
 int level_init(){
+
+    obstacle_array_size = 0;
     start.x = 10;
     start.y = HEIGHT/2;
 

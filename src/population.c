@@ -40,7 +40,7 @@ void population_draw() {
 }
 
 // Free the memory allocated for the population
-void population_free() {
+void population_cleanup() {
     for (int i = 0; i < NPOP; i++) {
         creature_free(&creature_array[i]);
     }

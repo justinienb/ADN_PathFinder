@@ -5,6 +5,7 @@
 #include "event.h"
 #include "population.h"
 #include "level.h"
+#include "fps.h"
 
 
 #include <SDL2/SDL.h>
@@ -24,6 +25,10 @@ int PLAYMODE;
 
 
 App_context app_context;
+
+SDL_Window* WINDOW;
+SDL_Renderer* RENDERER;
+TTF_Font* FONT;
 
 // Function to initialize SDL and other components
 int app_init(char** argv) {
@@ -45,12 +50,9 @@ int app_init(char** argv) {
 
 
 
-    //intialisation bateau du contexte
+    //intialisation of context
     app_context.current_state = MAIN_MENU;
     app_context.quit = SDL_FALSE;
-    app_context.window = NULL;
-    app_context.renderer = NULL;
-    app_context.font = NULL;
     app_context.input = (Input){0}; 
 
     // Initialize SDL
@@ -60,7 +62,7 @@ int app_init(char** argv) {
     }
 
     // Create SDL window and renderer
-    if (SDL_CreateWindowAndRenderer(WIDTH, HEIGHT, 0, &app_context.window, &app_context.renderer) == EXIT_FAILURE) {
+    if (SDL_CreateWindowAndRenderer(WIDTH, HEIGHT, 0, &WINDOW, &RENDERER) == EXIT_FAILURE) {
         fprintf(stderr, "SDL_CreateWindowAndRenderer failed: %s\n", SDL_GetError());
         SDL_Quit();
         return EXIT_FAILURE;
@@ -74,8 +76,8 @@ int app_init(char** argv) {
     }
 
     // Load the font
-    app_context.font = TTF_OpenFont("C:/Windows/Fonts/consola.ttf", 24);
-    if (app_context.font == NULL) {
+    FONT = TTF_OpenFont("C:/Windows/Fonts/consola.ttf", 24);
+    if (FONT == NULL) {
         SDL_Log("Failed to load font: %s", TTF_GetError());
         app_cleanup(&app_context);
         return EXIT_FAILURE;
@@ -99,28 +101,23 @@ int app_init(char** argv) {
 
 
 // function to clean up before making texture ect..
-void app_cleanup(App_context *context) {
-    if (context->font != NULL) {
-        TTF_CloseFont(context->font);
+void app_cleanup() {
+
+    //module cleanup;
+    population_cleanup();
+    fps_cleanup();
+
+    if (FONT != NULL) {
+        TTF_CloseFont(FONT);
     }
     TTF_Quit();
-    if (context->renderer != NULL) {
-        SDL_DestroyRenderer(context->renderer);
+    if (RENDERER != NULL) {
+        SDL_DestroyRenderer(RENDERER);
     }
-    if (context->window != NULL) {
-        SDL_DestroyWindow(context->window);
+    if (WINDOW != NULL) {
+        SDL_DestroyWindow(WINDOW);
     }
     SDL_Quit();
-}
-
-// Function to clean up SDL and other components
-void app_cleanup(App_context *context, SDL_Surface* text_surface, SDL_Texture* text) {
-    //if QUIT, then clean up text rendering
-    SDL_FreeSurface(text_surface);
-    SDL_DestroyTexture(text);
-    population_free();
-    
-    app_cleanup(&context);
 }
 
 
@@ -128,26 +125,19 @@ void app_cleanup(App_context *context, SDL_Surface* text_surface, SDL_Texture* t
 void app_run() {
     Uint64 start_ticks, last_frame_start_ticks, last_frame_end_ticks;
     float elapsed_ms, avgFPS;
-    char avgFPSText[32];
-    SDL_Rect textRect = {0, 0, 0, 0};
-    SDL_Color textColor = {255, 255, 255, 255};
-    SDL_Surface* text_surface = NULL;
-    SDL_Texture* text = NULL;
     
     while (!app_context.quit) {
         //####################### Statistics #######################
         last_frame_start_ticks = start_ticks;
         start_ticks = SDL_GetPerformanceCounter();
 
+        //calculate elapsed time of previous frame
+        fps_calculate(last_frame_start_ticks, last_frame_end_ticks);
+        fps_cap_60();
 
 
         event_update(&app_context.input, &app_context.quit);
 
-        //start counter and draw background
-        app_loop_start_routine(&start_ticks);
-
-
-        
 
         //#################### Drawing ####################
 
@@ -159,18 +149,17 @@ void app_run() {
         app_event_control();
 
         //draw statistics
-        app_statistics_draw(last_frame_start_ticks, last_frame_end_ticks);
-
+        fps_draw();
         //####################### Rendering #######################
         //render buffer to screen
-        SDL_RenderPresent(app_context.renderer);
+        SDL_RenderPresent(RENDERER);
 
 
         //####################### Statistics #######################
         last_frame_end_ticks = SDL_GetPerformanceCounter();
     }
     
-    app_cleanup(text_surface, text);
+    app_cleanup();
 }
 
 
@@ -180,13 +169,13 @@ void app_draw_background(){
 
     //####################### Clearing Drawing buffer #######################
     // Clear renderer buffer with black pixel
-    SDL_SetRenderDrawColor(app_context.renderer, 0, 0, 0, SDL_ALPHA_OPAQUE); //select black opaque
-    SDL_RenderClear(app_context.renderer); // turn all pixel in renderer buffer to black (background)
+    SDL_SetRenderDrawColor(RENDERER, 0, 0, 0, SDL_ALPHA_OPAQUE); //select black opaque
+    SDL_RenderClear(RENDERER); // turn all pixel in renderer buffer to black (background)
 }
 
 
-void app_draw_state(App_context context) {
-    switch (context.current_state) {
+void app_draw_state() {
+    switch (app_context.current_state) {
         case MAIN_MENU:
             menu_draw();
             break;
@@ -200,8 +189,8 @@ void app_draw_state(App_context context) {
 }
 
 
-void app_update_state(App_context context) {
-    switch (context.current_state) {
+void app_update_state() {
+    switch (app_context.current_state) {
         case MAIN_MENU:
             menu_update();
             break;
@@ -213,15 +202,3 @@ void app_update_state(App_context context) {
             break;
     }
 }
-
-
-
-
-
-
-
-
-//################################# Unused function #################################
-
-
-

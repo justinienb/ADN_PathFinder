@@ -10,6 +10,6 @@
 int population_init();
 void population_update(int simulation_step);
 void population_draw();
-void population_free();
+void population_cleanup();
 
 #endif // POPULATION_H

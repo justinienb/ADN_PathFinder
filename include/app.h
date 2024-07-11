@@ -21,9 +21,6 @@ typedef enum {
 typedef struct {
     App_state current_state;
     SDL_bool quit;
-    SDL_Window* window;
-    SDL_Renderer* renderer;
-    TTF_Font* font;
     Input input;
 } App_context;
 
