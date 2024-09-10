@@ -1,6 +1,4 @@
 # Description
-Ahah, pixel go brrrrr
-
 
 bin/pathfinder.exe [RECTSIZE] [ADNSIZE] [SPEED] [ROTATIONSPEED] [NPOP] [PLAYMODE]
 
@@ -77,7 +75,7 @@ The inputs are managed by the events module in event.c, which captures and proce
 ## Population management (population.c)
 population.c/populatin.h - Manages a collection of creatures, handling their lifecycle from initialization to updates during the simulation and final cleanup.
 
-## Entities (En-tities lol)
+## Entities
 
 In the heart of our simulation, the entities represent the dynamic components interacting within the virtual environment. Each type of entity, from creatures to obstacles and goals, plays a crucial role in the pathfinding challenges and behaviors demonstrated in the application. Here's how each entity is managed:
 
