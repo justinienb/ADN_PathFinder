@@ -58,7 +58,7 @@ This application is divided into multiple part the first one, wich happen to be 
 
 Each component works together to create a robust simulation environment where entities interact within a dynamically updated visual context. This architecture aims to make the system modular and extensible, allowing for easy expansion and modification.
 
-![Architecture diagram](https://raw.githubusercontent.com/gist/Tictactouc/7cd81b9bdcd51bb2031b1a58993f9a39/raw/a7d18f77ce2d1a6e9b5fc3aad0fe53054bfedc61/Architecture_diagram.svg)
+![Architecture diagram](https://raw.githubusercontent.com/gist/justinienb/7cd81b9bdcd51bb2031b1a58993f9a39/raw/a7d18f77ce2d1a6e9b5fc3aad0fe53054bfedc61/Architecture_diagram.svg)
 
 
 ## Arguments management (main.c)
